@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -ueo pipefail
+
+if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then
+    AWSCLI_URL="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+elif [ "${TARGETPLATFORM}" = "linux/arm64" ]; then
+    AWSCLI_URL="https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
+else
+    echo "Unsupported platform: ${TARGETPLATFORM}"
+    exit 1
+fi
+
+echo "Installing AWS CLI from ${AWSCLI_URL}..."
+
+cd /tmp
+curl -sSLf -o "awscli.zip" "$AWSCLI_URL"
+unzip awscli.zip
+./aws/install
+rm -rf /tmp/awscli.zip /tmp/aws

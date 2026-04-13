@@ -37,7 +37,7 @@ export type RenewAction = {
 const help = { type: "boolean", short: "h" } as const;
 const globalOptions = { help } as const;
 const globalUsage = `Usage:
-  certbot <command> [options] ...
+  certkit <command> [options] ...
 
 Commands:
   download    Download certificates from S3
@@ -52,7 +52,7 @@ const downloadOptions = {
   interval: { type: "string" },
 } as const;
 const downloadUsage = `Usage:
-  certbot download [options] <name>...
+  certkit download [options] <name>...
 
 Options:
   --help, -h               Show this help message and exit
@@ -73,7 +73,7 @@ const renewOptions = {
   interval: { type: "string" },
 } as const;
 const renewUsage = `Usage:
-  certbot renew [options] <subject>...
+  certkit renew [options] <subject>...
 
 Options:
   --help, -h                Show this help message and exit

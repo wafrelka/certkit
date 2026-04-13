@@ -26,7 +26,7 @@ async function runRenewOnce(config: RenewConfig): Promise<Error | undefined> {
 
   const stateUri = joinUrl(config.s3StatesUri, "lego");
 
-  const result = await $`aws s3 sync --delete ${stateUri} ${legoDir}`.noThrow();
+  const result = await $`aws s3 sync --no-progress --delete ${stateUri} ${legoDir}`.noThrow();
   if (result.code !== 0) {
     error(`failed to sync state from ${stateUri}`);
     return new Error(`failed to sync state from ${stateUri}`);
@@ -72,9 +72,9 @@ async function runRenewOnce(config: RenewConfig): Promise<Error | undefined> {
     const crtUri = joinUrl(config.s3CertsUri, name, "fullchain.pem");
 
     try {
-      await $`aws s3 sync --delete ${legoDir} ${stateUri}`;
-      await $`aws s3 cp ${keyPath} ${keyUri}`;
-      await $`aws s3 cp ${crtPath} ${crtUri}`;
+      await $`aws s3 sync --no-progress --delete ${legoDir} ${stateUri}`;
+      await $`aws s3 cp --no-progress ${keyPath} ${keyUri}`;
+      await $`aws s3 cp --no-progress ${crtPath} ${crtUri}`;
     } catch (e) {
       const m = `failed to sync state to ${stateUri}: ${
         e instanceof Error ? e.message : String(e)

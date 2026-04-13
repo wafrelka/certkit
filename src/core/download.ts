@@ -15,7 +15,7 @@ async function runDownloadOnce(config: DownloadConfig): Promise<Error | undefine
     const src = `${config.s3CertsUri.replace(/\/$/, "")}/${name}`;
     const dest = join(config.outDir, name);
     info(`downloading cert for ${name} from ${src} to ${dest}...`);
-    const result = await $`aws s3 sync --exact-timestamps ${src} ${dest}`.noThrow();
+    const result = await $`aws s3 sync --no-progress --exact-timestamps ${src} ${dest}`.noThrow();
     if (result.code !== 0) {
       error(`failed to download cert for ${name}`);
       err = new Error(`failed to download cert for ${name}`);

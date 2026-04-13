@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import $ from "@david/dax";
 import { error, info } from "./logging.ts";
+import { joinUrl } from "./path.ts";
 
 export type RenewConfig = {
   s3CertsUri: string;
@@ -23,7 +24,7 @@ async function runRenewOnce(config: RenewConfig): Promise<Error | undefined> {
   const legoDir = (config.legoDir ?? await makeTempDir()).replace(/\/+$/, "");
   let err = undefined;
 
-  const stateUri = join(config.s3StatesUri, "lego");
+  const stateUri = joinUrl(config.s3StatesUri, "lego");
 
   const result = await $`aws s3 sync --delete ${stateUri} ${legoDir}`.noThrow();
   if (result.code !== 0) {
@@ -67,8 +68,8 @@ async function runRenewOnce(config: RenewConfig): Promise<Error | undefined> {
       continue;
     }
 
-    const keyUri = join(config.s3CertsUri, name, "privkey.pem");
-    const crtUri = join(config.s3CertsUri, name, "fullchain.pem");
+    const keyUri = joinUrl(config.s3CertsUri, name, "privkey.pem");
+    const crtUri = joinUrl(config.s3CertsUri, name, "fullchain.pem");
 
     try {
       await $`aws s3 sync --delete ${legoDir} ${stateUri}`;
